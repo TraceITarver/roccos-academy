@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff7a59"><title>Rocco's Academy – Dog Training</title>
+<link rel="icon" type="image/png" sizes="64x64" href="icon-64.png"><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="apple-touch-icon" sizes="180x180" href="icon-180.png"><link rel="manifest" href="manifest.json">
+<style>
+:root{--p:#ff7a59;--pd:#e45f3e;--bg:#fff8f3;--c:#fff;--t:#2b2522;--m:#7a6f69;--g:#2fb37a;--y:#f5b82e;--r:18px}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--t);padding-bottom:84px}
+header{background:linear-gradient(135deg,#ff7a59,#ffb05c);color:#fff;padding:22px 18px 28px;border-radius:0 0 28px 28px}
+header h1{margin:0;font-size:22px}header p{margin:4px 0 0;opacity:.9}
+main{max-width:640px;margin:-14px auto 0;padding:0 14px}
+.card{background:var(--c);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:0 4px 16px rgba(80,40,20,.07)}
+.row{display:flex;gap:12px;align-items:center}.grow{flex:1}
+.avatar{width:64px;height:64px;border-radius:50%;background:#ffe3d8;display:grid;place-items:center;font-size:32px;object-fit:cover;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:var(--c);border-radius:var(--r);padding:12px;text-align:center;box-shadow:0 4px 16px rgba(80,40,20,.07)}
+.stat b{display:block;font-size:24px}.stat span{font-size:12px;color:var(--m)}
+h2{font-size:17px;margin:18px 4px 10px}
+.lesson{display:flex;gap:12px;align-items:center;cursor:pointer}.lesson .ic{font-size:28px;width:46px;height:46px;border-radius:14px;background:#fff1ea;display:grid;place-items:center}
+.lesson h3{margin:0;font-size:16px}.lesson small{color:var(--m)}
+.badge{font-size:11px;padding:4px 9px;border-radius:99px;font-weight:600;white-space:nowrap}
+.b0{background:#eee;color:#666}.b1{background:#fff2cc;color:#9a6b00}.b2{background:#d6f5e6;color:#167a4f}
+button,.btn{text-decoration:none;display:inline-block;font:inherit;border:0;border-radius:14px;padding:12px 16px;background:var(--p);color:#fff;font-weight:600;cursor:pointer}
+button:active{transform:scale(.97)}.ghost{background:#fff1ea;color:var(--pd)}
+input,select,textarea{font:inherit;width:100%;padding:11px;border:1px solid #eadfd8;border-radius:12px;margin:4px 0 10px;background:#fff}
+label{font-size:13px;color:var(--m)}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:8px 0 calc(8px + env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(0,0,0,.06);z-index:5}
+nav a{flex:1;text-align:center;color:var(--m);text-decoration:none;font-size:12px}nav a div{font-size:22px}nav a.on{color:var(--p);font-weight:700}
+ol,ul{padding-left:20px;margin:6px 0}li{margin:6px 0;line-height:1.45}
+.seg{display:flex;gap:6px}.seg button{flex:1;background:#f3ece8;color:var(--t);padding:10px 4px;font-size:13px}.seg button.sel{background:var(--p);color:#fff}
+.timer{font-size:64px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;margin:10px 0}
+.clicker{width:150px;height:150px;border-radius:50%;font-size:22px;margin:10px auto;display:block;background:radial-gradient(circle at 35% 30%,#ffa184,#e45f3e);box-shadow:0 8px 24px rgba(228,95,62,.4)}
+.log{border-left:3px solid var(--p);padding-left:10px;margin:8px 0;font-size:14px}.muted{color:var(--m);font-size:13px}
+.week{display:flex;gap:6px;justify-content:space-between}.d{flex:1;text-align:center;font-size:11px;color:var(--m)}.d i{display:block;height:28px;border-radius:8px;background:#f1e8e3;margin-bottom:4px}.d i.on{background:var(--g)}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#2b2522;color:#fff;padding:10px 16px;border-radius:99px;font-size:14px;opacity:0;transition:.3s;pointer-events:none}.toast.show{opacity:1}
+</style></head><body>
+<header><h1 class="brand"><img class="mav" src="icon-192.png" alt="Rocco">Rocco's Academy</h1><p id="sub">Positive training, guided by Rocco</p></header>
+<main id="app"></main>
+<nav><a href="#home" data-t="home"><div>🏠</div>Home</a><a href="#plan" data-t="plan"><div>🗓️</div>Plan</a><a href="#lessons" data-t="lessons"><div>📚</div>Lessons</a><a href="#train" data-t="train"><div>⏱️</div>Train</a><a href="#fix" data-t="fix"><div>🛠️</div>Fix</a><a href="#log" data-t="log"><div>📝</div>Log</a><a href="#profile" data-t="profile"><div>🐶</div>Dog</a></nav>
+<div class="toast" id="toast"></div>
+<script src="lessons.js"></script><script src="problems.js"></script><script src="app.js"></script></body></html>
+<style>.rocko{display:flex;gap:10px;background:#fff4d6;border-radius:var(--r);padding:12px 14px;margin-bottom:14px;border:1px dashed #f5b82e}.rocko .f{font-size:30px}.rocko b{color:#9a6b00}</style>
+<style>.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{background:#f3ece8;color:var(--t);padding:8px 12px;border-radius:99px;font-size:13px;font-weight:500}.chip.sel{background:var(--p);color:#fff}
+.task{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3ece8}.task:last-child{border:0}.chk{width:24px;height:24px;border-radius:8px;border:2px solid #e2d6cf;display:grid;place-items:center;flex:none;font-size:14px}.chk.on{background:var(--g);border-color:var(--g);color:#fff}
+.wk{border-left:4px solid #eadfd8}.wk.cur{border-left-color:var(--p)}nav a{font-size:11px}fieldset{border:0;padding:0;margin:0 0 12px}legend{font-size:13px;color:var(--m);margin-bottom:6px}</style>
+<style>main a{color:var(--pd)}</style>
+<style>.mav{width:48px;height:48px;border-radius:50%;background:#fff;object-fit:cover;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.15);flex:none}.brand{display:flex;align-items:center;gap:10px}.rocko .mav{width:40px;height:40px;border-width:2px}</style>
