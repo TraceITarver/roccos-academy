@@ -29,3 +29,22 @@ App Store guideline 4.2 ("minimum functionality") can reject apps that are just 
 2. **RevenueCat** (free until $2.5k/month revenue): create an account and project, add the iOS app (bundle id `com.tracetarver.roccosacademy`), and upload an App Store Connect in-app purchase key. Import all three products, create the entitlement `plus` and attach **all three** (monthly, yearly, lifetime), then create a "default" offering with Monthly, Annual, and Lifetime packages. Restore purchases picks up Lifetime automatically. Paste the public iOS SDK key (`appl_...`) into `config.js` → `REVENUECAT_IOS_API_KEY`, then run `npm run sync`.
 3. **Amazon Associates:** sign up at affiliate-program.amazon.com using the live site URL, then put your tracking ID (e.g. `yourname-20`) into `config.js` → `AFFILIATE_TAG`. Amazon requires 3 qualifying sales within 180 days to stay approved.
 4. **Web preview of Plus:** open the site with `?dev=plus` (turn it off with `?dev=off`). Web payments aren't wired up.
+
+## Accounts & cloud sync (Firebase)
+1. Go to https://console.firebase.google.com → Add project → name it "Roccos Academy" (Analytics optional).
+2. Build → Authentication → Get started → Sign-in method: enable **Email/Password** and **Apple**.
+   - For Apple: in Apple Developer → Identifiers, enable "Sign in with Apple" on `com.tracetarver.roccosacademy`; create a Services ID + key and paste them into Firebase's Apple provider. Add `traceitarver.github.io` under Authentication → Settings → Authorized domains.
+3. Build → Firestore Database → Create database (production mode) → Rules, paste and Publish:
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read, write, delete: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}
+```
+4. Project settings → Your apps → Add **Web app** → copy the `firebaseConfig` object and paste its values into `FIREBASE_CONFIG` in `config.js` (or send them to Grok Bot).
+5. Then run `npm run sync`, commit, push. Accounts turn on automatically; until then the app stays local-only and shows "coming soon".
+Notes: account deletion is in-app (Account → Delete account), as Apple requires. RevenueCat is linked to the Firebase uid on sign-in so purchases follow the account. For native Sign in with Apple inside the iPhone app, a Capacitor Apple sign-in plugin may be needed if the popup flow is blocked in the app's web view; test on device.

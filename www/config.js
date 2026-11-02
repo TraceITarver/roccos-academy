@@ -8,6 +8,9 @@ const CONFIG={
  PRICES:{monthly:"$6.99/month",yearly:"$39.99/year",lifetime:"$119.99 once"}, // display fallback; App Store prices from RevenueCat override these
  // TODO(Trace): replace with your Amazon Associates tracking ID (e.g. "yourname-20")
  AFFILIATE_TAG:"AFFILIATE_TAG_HERE",
+ // TODO(Trace): paste your Firebase web app config (Firebase console → Project settings → Your apps → Web app).
+ // While apiKey is "FIREBASE_API_KEY_HERE", accounts are off and the app stays fully local.
+ FIREBASE_CONFIG:{apiKey:"FIREBASE_API_KEY_HERE",authDomain:"",projectId:"",storageBucket:"",messagingSenderId:"",appId:""},
  FREE_LESSONS:["name","sit","down","stay","come","potty","crate"]
 };
 const GEAR=[
