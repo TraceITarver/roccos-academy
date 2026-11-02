@@ -4,8 +4,8 @@
 const CONFIG={
  REVENUECAT_IOS_API_KEY:"REVENUECAT_IOS_API_KEY_HERE",
  ENTITLEMENT:"plus",
- PRODUCTS:{monthly:"roccos_plus_monthly",yearly:"roccos_plus_yearly"},
- PRICES:{monthly:"$4.99/month",yearly:"$29.99/year"}, // display fallback; App Store prices from RevenueCat override these
+ PRODUCTS:{monthly:"roccos_plus_monthly",yearly:"roccos_plus_yearly",lifetime:"roccos_plus_lifetime"}, // lifetime = non-consumable, same "plus" entitlement
+ PRICES:{monthly:"$6.99/month",yearly:"$39.99/year",lifetime:"$119.99 once"}, // display fallback; App Store prices from RevenueCat override these
  // TODO(Trace): replace with your Amazon Associates tracking ID (e.g. "yourname-20")
  AFFILIATE_TAG:"AFFILIATE_TAG_HERE",
  FREE_LESSONS:["name","sit","down","stay","come","potty","crate"]
