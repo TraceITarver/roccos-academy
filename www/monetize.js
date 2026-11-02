@@ -1,0 +1,48 @@
+// Freemium layer: Free vs Rocco's Academy Plus
+(function(){const u=new URLSearchParams(location.search).get("dev");
+ if(u=="plus")localStorage.setItem("roccos-dev-plus","1");if(u=="off")localStorage.removeItem("roccos-dev-plus")})();
+const isPlus=()=>!!(S.plusActive||localStorage.getItem("roccos-dev-plus"));
+const isFree=id=>CONFIG.FREE_LESSONS.includes(id);
+const lockedLesson=id=>!isFree(id)&&!isPlus();
+const gearUrl=g=>`https://www.amazon.com/s?k=${encodeURIComponent(g.q)}&tag=${encodeURIComponent(CONFIG.AFFILIATE_TAG)}`;
+const DISCLOSURE=`<p class="muted" style="font-size:12px">As an Amazon Associate we earn from qualifying purchases.</p>`;
+const plusBadge=`<span class="badge" style="background:#fff0c2;color:#8a5a00">🔒 Plus</span>`;
+const lockCard=(t)=>`<div class="card" style="text-align:center;border:2px dashed #f5b82e"><div style="font-size:30px">🔒</div><b>${t}</b><p class="muted">Part of Rocco's Academy Plus.</p><button onclick="location.hash='paywall'">See Plus</button></div>`;
+// lesson rows
+lessonRow=function(l){const p=prog(l.id),lk=lockedLesson(l.id);return `<div class="card lesson" onclick="location.hash='${lk?"paywall":"lesson/"+l.id}'"><div class="ic">${l.icon}</div><div class="grow"><h3>${l.title}</h3><small>${l.level} · ${l.summary}</small></div>${lk?plusBadge:`<span class="badge b${p}">${ST[p]}</span>`}</div>`};
+const m_lesson=V.lesson;V.lesson=id=>{const l=LESSONS.find(x=>x.id==id);if(l&&lockedLesson(id))return `<p><a href="#lessons">← All lessons</a></p><div class="card"><h2 style="margin:0">${l.icon} ${l.title}</h2><p>${l.summary}</p></div>`+lockCard("Unlock "+l.title+" with Plus");
+ let h=m_lesson(id);const g=(LESSON_GEAR[id]||[]).map(k=>GEAR.find(x=>x.id==k));
+ if(g.length)h=h.replace(/<button style="width:100%" onclick="location.hash='train/,`<div class="card"><b>🎒 Helpful gear</b><div>${g.map(x=>`<a href="#gear">${x.icon} ${x.name}</a>`).join(" · ")}</div></div><button style="width:100%" onclick="location.hash='train/`);return h};
+const m_lessons=V.lessons;V.lessons=()=>m_lessons()+`<div class="card lesson" onclick="location.hash='gear'"><div class="ic">🎒</div><div class="grow"><h3>Rocco's Gear Picks</h3><small>The few tools that actually help</small></div></div>`;
+// plan
+const m_plan=V.plan;V.plan=()=>isPlus()?m_plan():rocko("With Plus, I'll build a week-by-week plan tailored to your dog's age, breed, energy, and problems, with daily sessions that check off as you go.")+lockCard("Personalized training plan");
+const m_makePlan=makePlan;makePlan=function(){if(isPlus())return m_makePlan();
+ S.quiz={age:$("#q_age").value,size:$("#q_size").value,group:$("#q_group").value,energy:$("#q_energy").value,exp:$("#q_exp").value,goals:picked("goals"),problems:picked("problems")};
+ Object.assign(S.dog,{name:$("#dn").value.trim(),age:$("#da").value.trim(),breed:$("#db").value.trim()});save();toast("Answers saved! Plus builds your plan");location.hash="paywall"};
+const m_home=V.home;V.home=()=>{let h=m_home();if(!isPlus())h=h.replace(/<h2>This week's plan<\/h2>[\s\S]*?See full plan →<\/a><\/p><\/div>|<div class="card"><b>🗓️ Get a personalized plan<\/b>[\s\S]*?Take the quiz<\/button><\/div>/,`<div class="card" style="background:linear-gradient(135deg,#fff4d6,#ffe6dc)"><div class="row"><img class="mav" src="icon-192.png" alt=""><div class="grow"><b>Rocco's Academy Plus</b><div class="muted">Personal plan, Fix My Problem, advanced lessons & reminders</div></div></div><button style="width:100%;margin-top:10px" onclick="location.hash='paywall'">Try 7 days free</button></div>`);
+ return h+`<div class="card lesson" onclick="location.hash='gear'"><div class="ic">🎒</div><div class="grow"><h3>Rocco's Gear Picks</h3><small>Clickers, treats, harnesses & more</small></div></div>`};
+// fix
+const m_fix=V.fix;V.fix=id=>{const pr=PROBLEMS.find(p=>p.id==id);if(!pr||isPlus())return m_fix(id).replace(/<span class="badge b2">In plan<\/span>/g,"$&")+(pr?"":"")+(!pr&&!isPlus()?"":"");
+ return `<p><a href="#fix">← All problems</a></p><div class="card"><h2 style="margin:0">${pr.icon} ${pr.title}</h2></div><div class="card"><b>🔍 Likely causes</b><ul>${pr.causes.map(x=>`<li>${x}</li>`).join("")}</ul></div>`+lockCard("Full fix plan, what to avoid, management & when to get help")+`<div class="card"><b>🩺 Safety note</b><p>${pr.pro}</p></div>`};
+// profile reminder lock
+const m_profile=V.profile;V.profile=()=>{let h=m_profile();if(!isPlus())h=h.replace(/<div class="card"><b>⏰ Daily practice reminder<\/b>[\s\S]*?<\/div><\/div><div class="card"><b>Data<\/b>/,`<div class="card lesson" onclick="location.hash='paywall'"><div class="ic">⏰</div><div class="grow"><h3>Daily practice reminder</h3><small>Get a daily nudge from Rocco</small></div>${plusBadge}</div><div class="card"><b>Data</b>`).replace("Save &amp; build my plan","Save answers").replace("Save & build my plan","Save answers");
+ return h+(isPlus()?`<p class="muted" style="text-align:center">⭐ Rocco's Academy Plus active${localStorage.getItem("roccos-dev-plus")?" (dev preview)":""}</p>`:"")};
+const m_setRem=setReminder;setReminder=(on,t)=>isPlus()?m_setRem(on,t):(location.hash="paywall");
+// gear
+V.gear=()=>`<h2>Rocco's Gear Picks</h2>${rocko("You don't need much! Treats and patience do most of the work. These are the few tools that genuinely help.")}`+GEAR.map(g=>`<div class="card"><b>${g.icon} ${g.name}</b><p style="margin:6px 0">${g.blurb}</p><a class="btn ghost" href="${gearUrl(g)}" target="_blank" rel="noopener sponsored">Shop on Amazon</a></div>`).join("")+DISCLOSURE;
+// purchases (RevenueCat on iOS)
+const RC=()=>NATIVE&&PL.Purchases;let OFFER=null;
+async function rcInit(){if(!RC()||CONFIG.REVENUECAT_IOS_API_KEY.includes("_HERE"))return;try{await PL.Purchases.configure({apiKey:CONFIG.REVENUECAT_IOS_API_KEY});await refreshEnt();const o=await PL.Purchases.getOfferings();OFFER=o.current;render()}catch(e){console.log("RC init",e)}}
+async function refreshEnt(){const r=await PL.Purchases.getCustomerInfo();S.plusActive=!!r.customerInfo.entitlements.active[CONFIG.ENTITLEMENT];save()}
+function pkgFor(k){if(!OFFER)return null;return OFFER.availablePackages.find(p=>p.product.identifier==CONFIG.PRODUCTS[k])}
+async function buy(k){if(!RC()){toast("Coming soon on the App Store!");return}const p=pkgFor(k);if(!p){toast("Store not available yet");return}
+ try{const r=await PL.Purchases.purchasePackage({aPackage:p});S.plusActive=!!r.customerInfo.entitlements.active[CONFIG.ENTITLEMENT];save();toast(S.plusActive?"Welcome to Plus! 🎉":"Purchase pending");location.hash="home"}catch(e){if(!e.userCancelled)toast("Purchase didn't go through")}}
+async function restore(){if(!RC()){toast("Coming soon on the App Store!");return}try{const r=await PL.Purchases.restorePurchases();S.plusActive=!!r.customerInfo.entitlements.active[CONFIG.ENTITLEMENT];save();toast(S.plusActive?"Plus restored ✅":"No purchases found");render()}catch(e){toast("Restore failed")}}
+const price=k=>{const p=pkgFor(k);return p?p.product.priceString+(k=="monthly"?"/month":"/year"):CONFIG.PRICES[k]};
+V.paywall=()=>`<div class="card" style="text-align:center"><img src="icon-512.png" alt="Rocco" style="width:120px;height:120px;border-radius:50%;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.12)"><h2 style="margin:10px 0 4px">Rocco's Academy Plus</h2><p class="muted">Train smarter with a plan made for your dog.</p></div>
+<div class="card"><ul style="list-style:none;padding:0">${["🗓️ Personalized week-by-week training plan","🛠️ Fix My Problem: full step-by-step fix plans for 12 behaviors","🎓 Advanced lessons: leave it, drop it, loose-leash, wait, settle, socialization","⏰ Daily practice reminders from Rocco","❤️ Support a small, independent app"].map(x=>`<li style="margin:10px 0">${x}</li>`).join("")}</ul></div>
+${isPlus()?`<div class="card" style="text-align:center"><b>⭐ Plus is active</b></div>`:`<div class="card" style="border:2px solid var(--p)"><span class="badge" style="background:var(--p);color:#fff">BEST VALUE</span><h3 style="margin:8px 0 2px">Yearly: ${price("yearly")}</h3><div class="muted">7-day free trial, then ${price("yearly")}. That's about $2.50/month.</div><button style="width:100%;margin-top:10px" onclick="buy('yearly')">Start free trial</button></div>
+<div class="card"><h3 style="margin:0 0 2px">Monthly: ${price("monthly")}</h3><button class="ghost" style="width:100%;margin-top:10px" onclick="buy('monthly')">Choose monthly</button></div>
+${NATIVE?"":`<div class="card" style="text-align:center;background:#fff4d6"><b>📱 Coming soon on the App Store</b><p class="muted">Subscriptions will be available in the iPhone app.</p></div>`}`}
+<p style="text-align:center"><a href="javascript:restore()">Restore purchases</a></p><p class="muted" style="text-align:center;font-size:12px">Subscriptions renew automatically unless canceled at least 24 hours before the end of the period. Manage or cancel anytime in your App Store account settings.</p>`;
+rcInit();render();

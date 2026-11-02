@@ -23,3 +23,9 @@ npm run sync          # copies web files into www/ and syncs to ios/
 npx cap open ios      # (on a Mac) opens Xcode
 ```
 App Store guideline 4.2 ("minimum functionality") can reject apps that are just websites. The native reminders, haptics, and offline use help, but a bit more native polish lowers that risk.
+
+## Monetization setup (Rocco's Academy Plus)
+1. **App Store Connect:** sign the Paid Apps agreement and add banking and tax info. Create a subscription group "Rocco's Academy Plus" with two auto-renewing subscriptions: `roccos_plus_monthly` ($4.99/month) and `roccos_plus_yearly` ($29.99/year with a 7-day free-trial introductory offer).
+2. **RevenueCat** (free until $2.5k/month revenue): create an account and project, add the iOS app (bundle id `com.tracetarver.roccosacademy`), and upload an App Store Connect in-app purchase key. Import both products, create the entitlement `plus` and attach both products, then create a "default" offering with monthly and annual packages. Paste the public iOS SDK key (`appl_...`) into `config.js` → `REVENUECAT_IOS_API_KEY`, then run `npm run sync`.
+3. **Amazon Associates:** sign up at affiliate-program.amazon.com using the live site URL, then put your tracking ID (e.g. `yourname-20`) into `config.js` → `AFFILIATE_TAG`. Amazon requires 3 qualifying sales within 180 days to stay approved.
+4. **Web preview of Plus:** open the site with `?dev=plus` (turn it off with `?dev=off`). Web payments aren't wired up.
