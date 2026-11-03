@@ -57,4 +57,4 @@ match /suggestions/{id} {
   allow read, update, delete: if false;
 }
 ```
-Until Firebase is set up, suggestions open a prefilled email to traceamite@gmail.com.
+Until Firebase is set up, suggestions open a prefilled email to roccosacademysupport@gmail.com.

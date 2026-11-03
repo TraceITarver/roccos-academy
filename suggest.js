@@ -1,5 +1,5 @@
 // Suggestions / Feedback screen
-const APP_VER="1.0.0",SG="roccos-suggestions",FEED_EMAIL="traceamite@gmail.com";
+const APP_VER="1.0.0",SG="roccos-suggestions",FEED_EMAIL=CONFIG.SUPPORT_EMAIL;
 const SG_CATS=[["feature","💡 New feature"],["change","✏️ Change something"],["bug","🐞 Bug / problem"],["other","💬 Other"]];
 const SGD="roccos-suggest-draft";let SGS=Object.assign({cat:"feature",rate:0,msg:"",email:""},JSON.parse(localStorage.getItem(SGD)||"{}"),{sent:null});
 const sgSave=()=>{const m=$("#sm"),e=$("#se");if(m)SGS.msg=m.value;if(e)SGS.email=e.value;localStorage.setItem(SGD,JSON.stringify({cat:SGS.cat,rate:SGS.rate,msg:SGS.msg,email:SGS.email}))};
