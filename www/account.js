@@ -53,7 +53,7 @@ V.account=()=>{const u=ACC.user,s=subInfo();let prof;
   <button style="width:100%;margin-top:12px" onclick="location.hash='paywall'">Upgrade to Plus: 7 days free</button><div class="row" style="margin-top:10px"><button class="ghost grow" onclick="restore()">Restore purchases</button>${NATIVE?`<button class="ghost grow" onclick="manageSub()">Manage subscription</button>`:""}</div>`}
   <p class="muted" style="font-size:12px">Subscriptions are billed through your Apple ID and managed in App Store settings. Deleting your account doesn't cancel a subscription.</p></div>`;
  const del=u?`<div class="card"><b>Danger zone</b><p class="muted">Permanently delete your account and cloud backup.</p><button class="ghost" style="color:#c0392b" onclick="deleteAcc()">Delete account</button></div>`:"";
- return `<h2>Account</h2>`+prof+sub+del};
+ return `<h2>Account</h2>`+prof+sub+del+`<p class="muted" style="text-align:center;font-size:13px"><a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> · <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener">Terms of Use</a></p>`};
 // header account button
 (function(){const h=document.querySelector("header");if(!h||document.getElementById("accBtn"))return;h.style.position="relative";const a=document.createElement("a");a.id="accBtn";a.href="#account";a.setAttribute("aria-label","Account");a.textContent="👤";a.style.cssText="position:absolute;top:calc(22px + env(safe-area-inset-top));right:18px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center;font-size:22px;text-decoration:none";h.appendChild(a)})();
 loadSub();accInit();render();

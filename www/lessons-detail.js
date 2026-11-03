@@ -198,4 +198,16 @@ safety:["Ask your vet when your puppy can safely visit public places based on va
 puppy:"The socialization window closes around 14–16 weeks. Prioritize safe, positive experiences now.",
 adult:"Adults can still learn, just more slowly. Go at their pace."}
 };
+
+// Next-level goals and extra troubleshooting
+Object.assign(LESSON_DETAIL.leaveit,{next:"Proof it on walks: practice Leave It with boring items on the sidewalk, then with tastier ones. Next, try 'Leave It' with toys and other dogs at a distance, and pair it with Drop It."});
+Object.assign(LESSON_DETAIL.drop,{next:"Use Drop It in fetch and tug games so it's part of play. Then practice with higher-value items (a chew, a sock) by trading up with great treats. Add Leave It so your dog skips things before picking them up."});
+Object.assign(LESSON_DETAIL.leash,{next:"Add distractions slowly: a quiet street, then a park edge, then busier places. Practice turns, stops, and changing pace. Then try the Leash Walking program for a day-by-day plan."});
+Object.assign(LESSON_DETAIL.crate,{next:"Build longer calm stays while you're home, then short absences (5, 10, 20 minutes). Practice crating with a Settle cue and a chew. The Home Alone program builds on this."});
+Object.assign(LESSON_DETAIL.potty,{next:"Teach a potty cue ('Go potty') said while they go, then rewarded. Slowly stretch the time between breaks, and teach a bell or door signal so your dog can tell you when they need out."});
+Object.assign(LESSON_DETAIL.social,{next:"Keep adding new places, surfaces, sounds, and people at your dog's pace. Practice 'Watch me' and Settle in new places, and try calm public outings like a pet store or café patio."});
+Object.assign(LESSON_DETAIL.wait,{next:"Use Wait at every door, car door, and food bowl so it becomes a habit. Then add distance and distractions, and pair it with Stay for longer holds."});
+Object.assign(LESSON_DETAIL.settle,{next:"Take your mat on outings: a café patio, a friend's house, the vet lobby. Build up to longer settles with a chew, and try the Calm Dog program."});
+LESSON_DETAIL.wait.trouble.push(["They break the wait the moment you move","Make the pause shorter, mark and reward before they move, and add your own movement in tiny steps."],["They wait at home but not at the car or curb","New places are harder. Lower the difficulty there: shorter waits, more rewards, and a leash for safety."]);
+LESSON_DETAIL.settle.trouble.push(["They won't stay on the mat","Reward often while they're on it, drop treats between their paws, and make sessions very short at first."],["They settle at home but not out and about","Bring the mat with you and practice in quiet spots first, rewarding calm breathing and lying down."],["They're too wound up to lie down","Do a short walk or a sniffing game first, then practice. Calm comes easier after their needs are met."]);
 LESSONS.forEach(l=>{const d=LESSON_DETAIL[l.id];if(d)l.d=d});
