@@ -31,7 +31,7 @@ App Store guideline 4.2 ("minimum functionality") can reject apps that are just 
 4. **Web preview of Plus:** open the site with `?dev=plus` (turn it off with `?dev=off`). Web payments aren't wired up.
 
 ## Accounts & cloud sync (Firebase)
-1. Go to https://console.firebase.google.com → Add project → name it "Roccos Academy" (Analytics optional).
+1. Go to https://console.firebase.google.com → Add project → name it "Rocco's Academy" (Analytics optional).
 2. Build → Authentication → Get started → Sign-in method: enable **Email/Password** and **Apple**.
    - For Apple: in Apple Developer → Identifiers, enable "Sign in with Apple" on `com.tracetarver.roccosacademy`; create a Services ID + key and paste them into Firebase's Apple provider. Add `traceitarver.github.io` under Authentication → Settings → Authorized domains.
 3. Build → Firestore Database → Create database (production mode) → Rules, paste and Publish:

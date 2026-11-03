@@ -11,7 +11,7 @@ V.lesson=id=>{const l=LESSONS.find(x=>x.id==id);if(!l)return V.lessons();const p
  if(!d.stages)return head+`<div class="card"><b>📋 Steps</b><ol>${l.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div><button style="width:100%" onclick="location.hash='train/${id}'">Practice this now</button>`;
  let tot=0;d.stages.forEach(g=>tot+=g.s.length);const pct=Math.round(done.length/tot*100);
  const stages=d.stages.map((g,gi)=>sec("🪜",g.n,`<div>${g.s.map((s,si)=>{const k=gi+"-"+si,on=done.includes(k);return `<div class="task" onclick="tickStep('${id}','${k}')" style="cursor:pointer"><div class="chk stepchk ${on?"on":""}" data-k="${id}:${k}">${on?"✓":""}</div><div class="grow"><b style="color:var(--m);font-weight:600">${si+1}.</b> ${s}</div></div>`}).join("")}</div>`,gi==0)).join("");
- return head+rocko(d.why)
+ return head+roccoTip(d.why)
  +`<div class="card"><div class="row" style="justify-content:space-between"><b>📋 Step-by-step</b><span class="muted" id="steptxt">${done.length}/${tot} steps checked</span></div><div style="background:#f3ece8;border-radius:99px;height:8px;margin-top:8px"><div id="stepbar" style="width:${pct}%;background:var(--g);height:8px;border-radius:99px;transition:.3s"></div></div><p class="muted" style="margin:8px 0 0">Tap a step to tick it off. Work through stages in order and only move on when your dog succeeds about 4 out of 5 times.</p></div>`
  +sec("🎒","What you need",UL(d.need))+sec("🧰","Prep & setup",UL(d.setup))+stages
  +sec("🗣️","Cue word & hand signal",`<p><b>Say:</b> ${d.cue.word}</p><p><b>Show:</b> ${d.cue.signal}</p><p class="muted">Say the word once, pause a second, then give the signal. Over time the word alone will work.</p>`)
