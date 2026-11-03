@@ -55,5 +55,5 @@ V.account=()=>{const u=ACC.user,s=subInfo();let prof;
  const del=u?`<div class="card"><b>Danger zone</b><p class="muted">Permanently delete your account and cloud backup.</p><button class="ghost" style="color:#c0392b" onclick="deleteAcc()">Delete account</button></div>`:"";
  return `<h2>Account</h2>`+prof+sub+del};
 // header account button
-(function(){const h=document.querySelector("header");if(!h||document.getElementById("accBtn"))return;h.style.position="relative";const a=document.createElement("a");a.id="accBtn";a.href="#account";a.setAttribute("aria-label","Account");a.textContent="👤";a.style.cssText="position:absolute;top:22px;right:18px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center;font-size:22px;text-decoration:none";h.appendChild(a)})();
+(function(){const h=document.querySelector("header");if(!h||document.getElementById("accBtn"))return;h.style.position="relative";const a=document.createElement("a");a.id="accBtn";a.href="#account";a.setAttribute("aria-label","Account");a.textContent="👤";a.style.cssText="position:absolute;top:calc(22px + env(safe-area-inset-top));right:18px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center;font-size:22px;text-decoration:none";h.appendChild(a)})();
 loadSub();accInit();render();
