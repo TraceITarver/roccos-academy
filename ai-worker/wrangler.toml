@@ -1,0 +1,7 @@
+name = "roccos-ask"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+XAI_MODEL = "grok-4.20-0309-non-reasoning"
+# Secret (not in this file): wrangler secret put XAI_API_KEY

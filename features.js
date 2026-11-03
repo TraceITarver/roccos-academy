@@ -58,7 +58,7 @@ const f_profile=V.profile;V.profile=a=>{let h=f_profile(a);h=h.replace(/(<input[
 const f_plan=V.plan;V.plan=a=>{const b=BRD(S.dog.breed),h=f_plan(a);if(!b||!S.plan)return h;
  const tip=`<div class="card"><b>🧬 Tailored for a ${b[0]}</b><p class="muted" style="margin:6px 0">${b[1]==3?"High energy: add a 10-minute sniff walk or fetch before each session.":b[1]==1?"Lower energy: keep sessions to 2–3 minutes and stop while they're keen.":"Mix short sessions with play breaks."}</p>${b[5].filter(id=>!(S.fixes||[]).includes(id)).slice(0,3).map(id=>{const p=PROBLEMS.find(x=>x.id==id);return p?`<button class="chip" style="margin:3px" onclick="addFix('${id}')">＋ ${p.icon} ${p.title}</button>`:""}).join("")}</div>`;return tip+h};
 // ===== Ask Rocco =====
-const ASK_FREE=3,ASKK="roccos-ask-count";
+let ASK_BUSY=0;const ASK_FREE=3,ASKK="roccos-ask-count";
 const askUsed=()=>{const o=JSON.parse(localStorage.getItem(ASKK)||"{}");return o.d==todayISO()?o.n:0};
 const askBump=()=>localStorage.setItem(ASKK,JSON.stringify({d:todayISO(),n:askUsed()+1}));
 const HEALTH_RE=/\b(vomit|throw(ing)? up|diarrh|blood|limp|sick|ill|fever|letharg|not eating|won'?t eat|poison|ate (a |some )?(chocolate|grape|xylitol)|seizure|cough|itch|rash|lump|vaccin|medic|pain|injur|bleed|vet)\w*/i;
@@ -82,17 +82,19 @@ function askLocal(q){const t=q.toLowerCase(),nm=esc(dogName()),b=BRD(S.dog.breed
  if(!p&&!lw.length&&out.length<=(health+agg)&&!/breed|energy|exercise/.test(t))out.push(`<p>I'm not sure I understood. Try asking about a behavior (barking, pulling, jumping, potty, chewing, biting) or a skill (sit, stay, come, leash, crate).</p>`);
  links=[...new Set(links)].slice(0,3);if(links.length)out.push(`<div class="chips">${links.map(l=>`<a class="chip" href="#lesson/${l.id}" style="text-decoration:none">${l.icon} ${l.title}</a>`).join("")}</div>`);
  return out.join("")}
-async function askSend(){const i=$("#aq"),q=i.value.trim();if(!q)return;if(!isPlus()&&askUsed()>=ASK_FREE){location.hash="paywall";return}
- S.chat=S.chat||[];S.chat.push({r:"u",t:q});askBump();i.value="";S.chat.push({r:"a",t:"…",wait:1});save();render();
+async function askSend(){const i=$("#aq"),q=i.value.trim();if(!q||ASK_BUSY)return;if(!isPlus()&&askUsed()>=ASK_FREE){location.hash="paywall";return}
+ S.chat=S.chat||[];const history=S.chat.filter(m=>!m.wait).slice(-8).map(m=>({role:m.r=="u"?"user":"assistant",content:m.r=="u"?m.t:m.t.replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim().slice(0,800)}));
+ S.chat.push({r:"u",t:q});askBump();i.value="";ASK_BUSY=1;save();render();
  let ans="";const ep=(typeof CONFIG!="undefined"&&CONFIG.AI_ENDPOINT)||"";
- if(ep){try{const r=await fetch(ep,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q,dogProfile:{name:S.dog.name,breed:S.dog.breed,age:S.dog.age,quiz:S.quiz||null}})});const j=await r.json();
-  if(j&&(j.answer||j.reply))ans=`<p>${esc(j.answer||j.reply).replace(/\n\n/g,"</p><p>").replace(/\n/g,"<br>")}</p>`+((HEALTH_RE.test(q)||AGG_RE.test(q))?`<p class="muted">⚠️ Not veterinary advice — for health or aggression concerns, see your vet or a certified behaviorist.</p>`:"")}catch(e){}}
- if(!ans)ans=askLocal(q);
- S.chat[S.chat.length-1]={r:"a",t:ans};S.chat=S.chat.slice(-40);save();render()}
+ if(ep){try{const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),20000);const r=await fetch(ep,{method:"POST",signal:ctl.signal,headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q.slice(0,600),dogProfile:{name:S.dog.name,breed:S.dog.breed,age:S.dog.age,quiz:S.quiz||null},history})});clearTimeout(to);const j=await r.json();
+  if(r.ok&&j&&(j.answer||j.reply))ans=`<p>${esc(j.answer||j.reply).replace(/\n\n/g,"</p><p>").replace(/\n/g,"<br>")}</p>`+((HEALTH_RE.test(q)||AGG_RE.test(q))?`<p class="muted">⚠️ Not veterinary advice — for health or aggression concerns, see your vet or a certified behaviorist.</p>`:"")}catch(e){}}
+ else await new Promise(r=>setTimeout(r,500));
+ if(!ans)ans=askLocal(q);ASK_BUSY=0;
+ S.chat.push({r:"a",t:ans});S.chat=S.chat.slice(-40);save();render()}
 function askClear(){S.chat=[];save();render()}
 V.ask=()=>{const c=S.chat||[],left=ASK_FREE-askUsed(),sug=["How do I stop barking at the door?","My puppy bites my hands","How do I teach stay?","Pulls on the leash"];
  return `<h2>💬 Ask Rocco</h2><div class="card" style="display:flex;gap:12px;align-items:center"><img class="mav" src="icon-192.png" alt="Rocco" style="width:54px;height:54px"><div><b>Rocco, your training coach</b><div class="muted">Tips tailored to ${esc(dogName())}${S.dog.breed?` (${esc(S.dog.breed)})`:""}. Not a vet.</div></div></div>`+
- (c.length?c.map(m=>m.r=="u"?`<div style="display:flex;justify-content:flex-end;margin:8px 0"><div style="background:var(--p);color:#fff;padding:10px 14px;border-radius:18px 18px 4px 18px;max-width:80%">${esc(m.t)}</div></div>`:`<div style="display:flex;gap:8px;align-items:flex-start;margin:8px 0"><img class="mav" src="icon-192.png" alt="" style="width:32px;height:32px;flex:none"><div class="card" style="margin:0;max-width:86%;line-height:1.45">${m.t}</div></div>`).join(""):`<div class="chips" style="margin:8px 0">${sug.map(s=>`<button class="chip" onclick="$('#aq').value=this.textContent;askSend()">${s}</button>`).join("")}</div>`)+
+ (c.length?c.map(m=>m.r=="u"?`<div style="display:flex;justify-content:flex-end;margin:8px 0"><div style="background:var(--p);color:#fff;padding:10px 14px;border-radius:18px 18px 4px 18px;max-width:80%">${esc(m.t)}</div></div>`:`<div style="display:flex;gap:8px;align-items:flex-start;margin:8px 0"><img class="mav" src="icon-192.png" alt="" style="width:32px;height:32px;flex:none"><div class="card" style="margin:0;max-width:86%;line-height:1.45">${m.t}</div></div>`).join("")+(ASK_BUSY?`<div style="display:flex;gap:8px;align-items:center;margin:8px 0"><img class="mav" src="icon-192.png" alt="" style="width:32px;height:32px"><div class="card typing" style="margin:0;padding:12px 16px" aria-label="Rocco is typing"><span></span><span></span><span></span></div></div>`:""):`<div class="chips" style="margin:8px 0">${sug.map(s=>`<button class="chip" onclick="$('#aq').value=this.textContent;askSend()">${s}</button>`).join("")}</div>`)+
  `<div class="card"><textarea id="aq" rows="2" placeholder="Ask about ${esc(dogName())}'s training…" onkeydown="if(event.key=='Enter'&&!event.shiftKey){event.preventDefault();askSend()}"></textarea><button style="width:100%" onclick="askSend()">Ask Rocco</button><p class="muted" style="margin:8px 0 0">${isPlus()?"Unlimited questions with Plus.":`${Math.max(0,left)} of ${ASK_FREE} free questions left today. Plus: unlimited.`}${c.length?` · <a href="javascript:askClear()" style="color:var(--pd)">Clear chat</a>`:""}</p></div>`};
 // ===== Hub, Home, nav =====
 hub.splice(0,0,["ask","💬","Ask Rocco","Your AI training coach"],["health","🩺","Health & Care","Vet, meds, grooming reminders"],["behavior","📊","Behavior tracker","Log & see trends"]);
@@ -103,3 +105,5 @@ const f_home=V.home;V.home=a=>{let h=f_home(a);const due=careList().filter(r=>da
  return h+row};
 const f_render=render;render=function(){f_render();const v=(location.hash.slice(1)||"home").split("/")[0];if(["ask","health","behavior"].includes(v))document.querySelectorAll("nav a").forEach(n=>n.classList.toggle("on",n.dataset.t=="more"));if(v=="ask")setTimeout(()=>scrollTo(0,document.body.scrollHeight),0)};
 setTimeout(careSchedule,1500);render();
+
+(()=>{const st=document.createElement("style");st.textContent=".typing span{display:inline-block;width:8px;height:8px;margin:0 2px;border-radius:50%;background:#c9b8ae;animation:tdot 1s infinite}.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}@keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-5px);opacity:1}}";document.head.appendChild(st)})();
