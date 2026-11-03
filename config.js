@@ -2,7 +2,7 @@
 // TODO(Trace): paste your RevenueCat *public iOS SDK key* (starts with "appl_") from
 // RevenueCat dashboard → Project → API keys. Leave as-is until you have one.
 const CONFIG={
- SUPPORT_EMAIL:"roccosacademysupport@gmail.com", // shown in the app for support, suggestions and privacy requests
+ SUPPORT_EMAIL:"roccosacedemymysupport@gmail.com", // shown in the app for support, suggestions and privacy requests
  AI_ENDPOINT:"https://roccos-ask.roccosacademy.workers.dev", // optional: URL of your own server that calls an AI model. App POSTs {question, dogProfile} and expects {answer}. Empty = built-in Rocco answers.
  REVENUECAT_IOS_API_KEY:"REVENUECAT_IOS_API_KEY_HERE",
  ENTITLEMENT:"plus",
