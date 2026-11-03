@@ -86,7 +86,7 @@ async function askSend(){const i=$("#aq"),q=i.value.trim();if(!q||ASK_BUSY)retur
  S.chat=S.chat||[];const history=S.chat.filter(m=>!m.wait).slice(-8).map(m=>({role:m.r=="u"?"user":"assistant",content:m.r=="u"?m.t:m.t.replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim().slice(0,800)}));
  S.chat.push({r:"u",t:q});askBump();i.value="";ASK_BUSY=1;save();render();
  let ans="";const ep=(typeof CONFIG!="undefined"&&CONFIG.AI_ENDPOINT)||"";
- if(ep){try{const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),20000);const r=await fetch(ep,{method:"POST",signal:ctl.signal,headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q.slice(0,600),dogProfile:{name:S.dog.name,breed:S.dog.breed,age:S.dog.age,quiz:S.quiz||null},history})});clearTimeout(to);const j=await r.json();
+ if(ep){try{const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),20000);const r=await fetch(ep,{method:"POST",signal:ctl.signal,headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q.slice(0,600),dogProfile:Object.assign({name:S.dog.name,breed:S.dog.breed,age:S.dog.age,quiz:S.quiz||null},medForAI()),history})});clearTimeout(to);const j=await r.json();
   if(r.ok&&j&&(j.answer||j.reply))ans=`<p>${esc(j.answer||j.reply).replace(/\n\n/g,"</p><p>").replace(/\n/g,"<br>")}</p>`+((HEALTH_RE.test(q)||AGG_RE.test(q))?`<p class="muted">⚠️ Not veterinary advice — for health or aggression concerns, see your vet or a certified behaviorist.</p>`:"")}catch(e){}}
  else await new Promise(r=>setTimeout(r,500));
  if(!ans)ans=askLocal(q);ASK_BUSY=0;

@@ -28,11 +28,14 @@ export function buildMessages(body) {
   const q = clip(body.question, MAX_Q).trim();
   const d = body.dogProfile || {};
   const prof = [d.name && `Name: ${clip(d.name, 40)}`, d.breed && `Breed: ${clip(d.breed, 60)}`, d.age && `Age: ${clip(d.age, 30)}`,
-    d.quiz && d.quiz.energy && `Energy: ${clip(d.quiz.energy, 20)}`].filter(Boolean).join("; ");
+    d.quiz && d.quiz.energy && `Energy: ${clip(d.quiz.energy, 20)}`,
+    Array.isArray(d.conditions) && d.conditions.length && `Health conditions: ${d.conditions.slice(0, 8).map(x => clip(x, 60)).join(", ")}`,
+    Array.isArray(d.meds) && d.meds.length && `Current medications: ${d.meds.slice(0, 8).map(x => clip(x, 80)).join(", ")}`,
+    Array.isArray(d.allergies) && d.allergies.length && `Allergies: ${d.allergies.slice(0, 8).map(x => clip(x, 40)).join(", ")}`].filter(Boolean).join("; ");
   const hist = (Array.isArray(body.history) ? body.history : []).slice(-MAX_HIST)
     .filter(m => m && (m.role === "user" || m.role === "assistant") && m.content)
     .map(m => ({ role: m.role, content: clip(m.content, MAX_HIST_CHARS) }));
-  return [{ role: "system", content: SYSTEM + (prof ? `\n\nThe user's dog — ${prof}.` : "") }, ...hist, { role: "user", content: q }];
+  return [{ role: "system", content: SYSTEM + (prof ? `\n\nThe user's dog — ${prof}. If health info is given, keep advice gentle and compatible with it, never suggest changing medications, and defer medical questions to their vet.` : "") }, ...hist, { role: "user", content: q }];
 }
 
 export async function askGrok(env, body) {
