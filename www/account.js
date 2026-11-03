@@ -34,7 +34,7 @@ async function loadSub(){if(!RC()||CONFIG.REVENUECAT_IOS_API_KEY.includes("_HERE
 function subInfo(){if(ACC.sub)return ACC.sub;if(localStorage.getItem("roccos-dev-plus"))return{plan:"Plus (test mode)",dev:true};if(isPlus())return{plan:"Plus"};return null}
 const fmtD=d=>d?new Date(d).toLocaleDateString(undefined,{month:"long",day:"numeric",year:"numeric"}):"";
 function manageSub(){const u="https://apps.apple.com/account/subscriptions";NATIVE?window.open(u,"_system"):window.open(u,"_blank")}
-const kv=(k,v)=>`<div class="row" style="justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3ece8"><span class="muted">${k}</span><b style="text-align:right">${v}</b></div>`;
+const kv=(k,v)=>`<div class="row" style="justify-content:space-between;padding:8px 0;border-bottom:1px solid #ebe8de"><span class="muted">${k}</span><b style="text-align:right">${v}</b></div>`;
 V.account=()=>{const u=ACC.user,s=subInfo();let prof;
  if(!FB_ON)prof=`<div class="card"><b>☁️ Accounts & cloud backup are coming soon</b><p class="muted">Soon you'll be able to create an account to back up your dogs, progress, journal, and streak and use them on any device. For now everything is saved on this device.</p></div>`;
  else if(!ACC.ready)prof=`<div class="card"><p class="muted">Loading your account…</p></div>`;
