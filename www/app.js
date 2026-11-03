@@ -11,7 +11,7 @@ function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");se
 const dogName=()=>S.dog.name||"your dog";
 const avatar=()=>`<div class="avatar">${S.dog.photo?`<img src="${S.dog.photo}" alt="">`:"🐶"}</div>`;
 const CAP=window.Capacitor,NATIVE=!!(CAP&&CAP.isNativePlatform&&CAP.isNativePlatform()),PL=(CAP&&CAP.Plugins)||{};
-if(!NATIVE&&"serviceWorker" in navigator&&(location.protocol=="https:"||location.hostname=="localhost"))navigator.serviceWorker.register("sw.js").catch(()=>{});
+if(!NATIVE&&"serviceWorker" in navigator&&(location.protocol=="https:"||location.hostname=="localhost")){navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>{r.update();document.addEventListener("visibilitychange",()=>{if(document.visibilityState=="visible")r.update()})}).catch(()=>{});let rl=0;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(rl||!navigator.serviceWorker.controller)return;rl=1;location.reload()})}
 async function setReminder(on,time){S.reminder={on,time};save();
  if(!NATIVE){toast(on?"Reminders work in the iPhone app. Saved for later!":"Reminder off");return}
  const LN=PL.LocalNotifications;if(!LN)return;try{await LN.cancel({notifications:[{id:1}]});
