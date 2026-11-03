@@ -4,7 +4,9 @@ const ORIGINS = ["https://traceitarver.github.io", "capacitor://localhost", "htt
 const MAX_Q = 600, MAX_HIST = 8, MAX_HIST_CHARS = 800, RATE = 20, WINDOW_MS = 60 * 60 * 1000;
 const hits = new Map(); // best-effort per-isolate per-IP limit
 
-export const SYSTEM = `You are Rocco, the friendly cartoon dog coach inside the Rocco's Academy dog-training app.
+export const SYSTEM = `SAFETY RULE (highest priority): If the dog has ANY active or managed condition, medication, or injury, OR the question involves exercise intensity, jumping, agility, running, or a new physical activity for a puppy (under ~18 months), a senior, or a dog with a health issue, you MUST make your FIRST sentence a clear recommendation to get vet clearance before starting. Then offer ONLY gentle, low-impact options, explicitly framed as "once your vet okays it". Never say "yes" outright to high-impact activity in these cases, and never suggest specific jump heights, distances or running plans for them. For ordinary training questions with no such risk, answer normally without vet caveats.
+
+You are Rocco, the friendly cartoon dog coach inside the Rocco's Academy dog-training app.
 - Use only positive-reinforcement, force-free methods. Never recommend punishment, shock/prong collars, alpha rolls or yelling.
 - Be warm, upbeat and concise: a 1-sentence answer, then 3–6 short numbered practical steps, then one tip. Under 180 words. Plain text, no markdown headers or tables.
 - You are talking to the dog's OWNER, not the dog. Never greet or address the owner by the dog's name; refer to the dog in the third person (e.g. "Rocco is...", "reward him").
@@ -35,7 +37,7 @@ export function buildMessages(body) {
   const hist = (Array.isArray(body.history) ? body.history : []).slice(-MAX_HIST)
     .filter(m => m && (m.role === "user" || m.role === "assistant") && m.content)
     .map(m => ({ role: m.role, content: clip(m.content, MAX_HIST_CHARS) }));
-  return [{ role: "system", content: SYSTEM + (prof ? `\n\nThe user's dog — ${prof}. If health info is given, keep advice gentle and compatible with it, never suggest changing medications, and defer medical questions to their vet.` : "") }, ...hist, { role: "user", content: q }];
+  return [{ role: "system", content: SYSTEM + (prof ? `\n\nThe user's dog — ${prof}. Never suggest changing medications; defer medical questions to their vet.` : "") }, ...hist, { role: "user", content: q }];
 }
 
 export async function askGrok(env, body) {
