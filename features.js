@@ -101,7 +101,7 @@ hub.splice(0,0,["ask","💬","Ask Rocco","Your AI training coach"],["health","�
 const f_home=V.home;V.home=a=>{let h=f_home(a);const due=careList().filter(r=>daysUntil(r.due)<=7);
  const care=due.length?`<h2>Health & Care</h2><div class="card">${due.slice(0,4).map(r=>`<div class="row" style="padding:6px 0"><span style="font-size:22px">${CARE_T[r.type][0]}</span><div class="grow"><b>${esc(r.title)}</b></div>${dueTxt(daysUntil(r.due))}</div>`).join("")}<p style="margin:6px 0 0"><a href="#health" style="color:var(--pd)">Manage reminders →</a></p></div>`:"";
  h=h.replace("<h2>Explore</h2>",care+"<h2>Explore</h2>");
- const row=`<div class="stats" style="margin-top:10px"><div class="stat" onclick="location.hash='ask'" style="cursor:pointer"><b>💬</b><span>Ask Rocco</span></div><div class="stat" onclick="location.hash='health'" style="cursor:pointer"><b>🩺</b><span>Health</span></div><div class="stat" onclick="location.hash='behavior'" style="cursor:pointer"><b>📊</b><span>Behavior</span></div></div>`;
+ const row=`<div class="stats" style="margin-top:14px"><div class="stat" onclick="location.hash='ask'" style="cursor:pointer"><b>💬</b><span>Ask Rocco</span></div><div class="stat" onclick="location.hash='health'" style="cursor:pointer"><b>🩺</b><span>Health</span></div><div class="stat" onclick="location.hash='behavior'" style="cursor:pointer"><b>📊</b><span>Behavior</span></div></div>`;
  return h+row};
 const f_render=render;render=function(){f_render();const v=(location.hash.slice(1)||"home").split("/")[0];if(["ask","health","behavior"].includes(v))document.querySelectorAll("nav a").forEach(n=>n.classList.toggle("on",n.dataset.t=="more"));if(v=="ask")setTimeout(()=>scrollTo(0,document.body.scrollHeight),0)};
 setTimeout(careSchedule,1500);render();
