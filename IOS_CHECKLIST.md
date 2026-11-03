@@ -48,3 +48,13 @@ service cloud.firestore {
 4. Project settings → Your apps → Add **Web app** → copy the `firebaseConfig` object and paste its values into `FIREBASE_CONFIG` in `config.js` (or send them to Grok Bot).
 5. Then run `npm run sync`, commit, push. Accounts turn on automatically; until then the app stays local-only and shows "coming soon".
 Notes: account deletion is in-app (Account → Delete account), as Apple requires. RevenueCat is linked to the Firebase uid on sign-in so purchases follow the account. For native Sign in with Apple inside the iPhone app, a Capacitor Apple sign-in plugin may be needed if the popup flow is blocked in the app's web view; test on device.
+
+## Suggestions (Firestore)
+Add this inside `match /databases/{database}/documents { ... }` in your Firestore rules so anyone can submit but nobody can read from the app (read them in the Firebase console):
+```
+match /suggestions/{id} {
+  allow create: if request.resource.data.msg is string && request.resource.data.msg.size() < 5000;
+  allow read, update, delete: if false;
+}
+```
+Until Firebase is set up, suggestions open a prefilled email to traceamite@gmail.com.
