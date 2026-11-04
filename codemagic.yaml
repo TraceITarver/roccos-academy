@@ -20,9 +20,9 @@ workflows:
       - name: Install npm dependencies
         script: npm ci
       - name: Copy web assets and sync Capacitor iOS
-        script: npm run sync
+        script: node scripts/copy-web.js && npx cap copy ios && npx cap update ios || true
       - name: Install CocoaPods
-        script: cd ios/App && pod install
+        script: pod repo update && cd ios/App && pod install --repo-update
       - name: Set up code signing
         script: xcode-project use-profiles
       - name: Set build number from TestFlight
