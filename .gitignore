@@ -2,3 +2,5 @@ node_modules/
 ios/App/Pods/
 ios/App/App/public/
 ios/DerivedData/
+*.p8
+secrets/
