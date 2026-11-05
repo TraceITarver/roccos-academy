@@ -4,6 +4,7 @@
 const CONFIG={
  SUPPORT_EMAIL:"roccosacedemymysupport@gmail.com", // shown in the app for support, suggestions and privacy requests
  AI_ENDPOINT:"https://roccos-ask.roccosacademy.workers.dev", // optional: URL of your own server that calls an AI model. App POSTs {question, dogProfile} and expects {answer}. Empty = built-in Rocco answers.
+  SYNC_ENDPOINT:"https://roccos-sync.roccosacademy.workers.dev", // accounts + cloud backup worker
  REVENUECAT_IOS_API_KEY:"appl_CMDLtguLoiYqKBDXsvjRskwZksI",
  ENTITLEMENT:"plus",
  PRODUCTS:{monthly:"roccos_plus_monthly",yearly:"roccos_plus_yearly",lifetime:"roccos_plus_lifetime"}, // lifetime = non-consumable, same "plus" entitlement
