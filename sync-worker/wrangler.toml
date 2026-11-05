@@ -1,5 +1,0 @@
-name = "roccos-sync"
-main = "worker.js"
-compatibility_date = "2026-10-01"
-kv_namespaces = [{ binding = "DATA", id = "9bd94720895c48fdbbe61fca1548488c" }]
-# Secrets (not in this file): SESSION_SECRET, optional RESEND_API_KEY / MAIL_FROM
