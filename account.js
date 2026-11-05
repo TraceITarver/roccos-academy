@@ -36,7 +36,7 @@ const fmtD=d=>d?new Date(d).toLocaleDateString(undefined,{month:"long",day:"nume
 function manageSub(){const u="https://apps.apple.com/account/subscriptions";NATIVE?window.open(u,"_system"):window.open(u,"_blank")}
 const kv=(k,v)=>`<div class="row" style="justify-content:space-between;padding:8px 0;border-bottom:1px solid #ebe8de"><span class="muted">${k}</span><b style="text-align:right">${v}</b></div>`;
 V.account=()=>{const u=ACC.user,s=subInfo();let prof;
- if(!FB_ON)prof="";
+ if(!FB_ON)prof=`<div class="card"><b>☁️ Accounts & cloud backup are coming soon</b><p class="muted">Soon you'll be able to create an account to back up your dogs, progress, journal, and streak and use them on any device. For now everything is saved on this device.</p></div>`;
  else if(!ACC.ready)prof=`<div class="card"><p class="muted">Loading your account…</p></div>`;
  else if(u)prof=`<div class="card"><div class="row"><div class="avatar">👤</div><div class="grow"><b>${esc(u.displayName||u.email||"Signed in with Apple")}</b><div class="muted">${esc(u.email||"")}</div><div class="muted">Member since ${fmtD(u.metadata&&u.metadata.creationTime)}</div></div></div>
   ${kv("Cloud backup",ACC.syncing?"Syncing…":"✅ On")}${kv("Last synced",ACC.lastSync?new Date(ACC.lastSync).toLocaleString():"Not yet")}${ACC.err?`<p class="muted" style="color:#c0392b">${esc(ACC.err)}</p>`:""}
