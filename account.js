@@ -28,9 +28,9 @@ async function signOutAcc(){await pushCloud();await FB.au.signOut(FB.auth);await
 async function deleteAcc(){if(!confirm("Delete your account and all cloud data? This can't be undone. Data on this device stays. Subscriptions must be canceled separately in App Store settings."))return;
  try{await FB.fs.deleteDoc(docRef());await FB.au.deleteUser(FB.auth.currentUser);await rcLink(null);toast("Account deleted")}catch(x){toast(fbMsg(x))}}
 // ---- subscription info ----
-const PLAN_NAME={[CONFIG.PRODUCTS.monthly]:"Plus Monthly",[CONFIG.PRODUCTS.yearly]:"Plus Yearly",[CONFIG.PRODUCTS.lifetime]:"Lifetime"};
+const PLAN_NAME={[CONFIG.PRODUCTS.monthly]:"Plus Monthly",[CONFIG.PRODUCTS.yearly]:"Plus Yearly"};
 async function loadSub(){if(!RC()||CONFIG.REVENUECAT_IOS_API_KEY.includes("_HERE"))return;try{const r=await PL.Purchases.getCustomerInfo(),e=r.customerInfo.entitlements.active[CONFIG.ENTITLEMENT];
- ACC.sub=e?{plan:PLAN_NAME[e.productIdentifier]||"Plus",trial:e.periodType=="TRIAL",exp:e.expirationDate,renew:e.willRenew,lifetime:e.productIdentifier==CONFIG.PRODUCTS.lifetime||!e.expirationDate}:null;if(location.hash=="#account")render()}catch(e){console.log(e)}}
+ ACC.sub=e?{plan:PLAN_NAME[e.productIdentifier]||"Plus",trial:e.periodType=="TRIAL",exp:e.expirationDate,renew:e.willRenew}:null;if(location.hash=="#account")render()}catch(e){console.log(e)}}
 function subInfo(){if(ACC.sub)return ACC.sub;if(localStorage.getItem("roccos-dev-plus"))return{plan:"Plus (test mode)",dev:true};if(isPlus())return{plan:"Plus"};return null}
 const fmtD=d=>d?new Date(d).toLocaleDateString(undefined,{month:"long",day:"numeric",year:"numeric"}):"";
 function manageSub(){const u="https://apps.apple.com/account/subscriptions";NATIVE?window.open(u,"_system"):window.open(u,"_blank")}
@@ -47,8 +47,8 @@ V.account=()=>{const u=ACC.user,s=subInfo();let prof;
   <button style="width:100%;margin-top:10px;background:#000" onclick="appleSignIn()"> Sign in with Apple</button>
   <p style="text-align:center;margin:10px 0 0"><a href="javascript:resetPw()">Forgot password?</a></p><p class="muted" style="text-align:center">Accounts are optional. You can keep using the app without one.</p></div>`;
  const sub=`<h2>My Subscription</h2><div class="card">${s?`<div class="row"><div class="ic" style="font-size:28px">⭐</div><div class="grow"><b style="font-size:18px">${s.plan}</b></div><span class="badge b2">${s.trial?"Free trial":"Active"}</span></div>
-  ${kv("Status",s.trial?"In 7-day free trial":"Active")}${s.lifetime?kv("Access","Forever, no renewals"):s.exp?kv(s.renew?(s.trial?"Trial ends / first charge":"Renews on"):"Expires on",fmtD(s.exp)):""}${s.dev?`<p class="muted">Test mode is on (?dev=plus). Real purchases show here in the iPhone app.</p>`:""}
-  <div class="row" style="margin-top:12px">${s.lifetime||s.dev?"":`<button class="grow" onclick="manageSub()">Manage subscription</button>`}<button class="ghost grow" onclick="restore()">Restore purchases</button></div>`
+  ${kv("Status",s.trial?"In 7-day free trial":"Active")}${s.exp?kv(s.renew?(s.trial?"Trial ends / first charge":"Renews on"):"Expires on",fmtD(s.exp)):""}${s.dev?`<p class="muted">Test mode is on (?dev=plus). Real purchases show here in the iPhone app.</p>`:""}
+  <div class="row" style="margin-top:12px">${s.dev?"":`<button class="grow" onclick="manageSub()">Manage subscription</button>`}<button class="ghost grow" onclick="restore()">Restore purchases</button></div>`
   :`<div class="row"><div class="ic" style="font-size:28px">🐾</div><div class="grow"><b style="font-size:18px">Free</b><div class="muted">7 core lessons, timer, clicker, log & streak</div></div></div>
   <button style="width:100%;margin-top:12px" onclick="location.hash='paywall'">Upgrade to Plus: 7 days free</button><div class="row" style="margin-top:10px"><button class="ghost grow" onclick="restore()">Restore purchases</button>${NATIVE?`<button class="ghost grow" onclick="manageSub()">Manage subscription</button>`:""}</div>`}
   <p class="muted" style="font-size:12px">Subscriptions are billed through your Apple ID and managed in App Store settings. Deleting your account doesn't cancel a subscription.</p></div>`;
