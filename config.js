@@ -6,8 +6,8 @@ const CONFIG={
  AI_ENDPOINT:"https://roccos-ask.roccosacademy.workers.dev", // optional: URL of your own server that calls an AI model. App POSTs {question, dogProfile} and expects {answer}. Empty = built-in Rocco answers.
  REVENUECAT_IOS_API_KEY:"appl_CMDLtguLoiYqKBDXsvjRskwZksI",
  ENTITLEMENT:"plus",
- PRODUCTS:{monthly:"roccos_plus_monthly",yearly:"roccos_plus_yearly",lifetime:"roccos_plus_lifetime"}, // lifetime = non-consumable, same "plus" entitlement
- PRICES:{monthly:"$6.99/month",yearly:"$39.99/year",lifetime:"$119.99 once"}, // display fallback; App Store prices from RevenueCat override these
+ PRODUCTS:{monthly:"roccos_plus_monthly",yearly:"roccos_plus_yearly"},
+ PRICES:{monthly:"$6.99/month",yearly:"$39.99/year"}, // display fallback; App Store prices from RevenueCat override these
  // TODO(Trace): replace with your Amazon Associates tracking ID (e.g. "yourname-20")
  AFFILIATE_TAG:"AFFILIATE_TAG_HERE",
  // TODO(Trace): paste your Firebase web app config (Firebase console → Project settings → Your apps → Web app).
